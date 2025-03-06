@@ -1,12 +1,17 @@
 server:
   port: ${PORT:8080}
   address: 0.0.0.0
+  servlet:
+    encoding:
+      charset: UTF-8
+      force: true
+      enabled: true
 
 spring:
   application:
     name: server
   datasource:
-    url: ${DATABASE_URL:jdbc:sqlite:database.db}
+    url: ${DATABASE_URL:jdbc:sqlite:data/database.db}
     driver-class-name: org.sqlite.JDBC
   jpa:
     database-platform: com.example.server.config.SQLiteDialect
@@ -16,16 +21,28 @@ spring:
     properties:
       hibernate:
         format_sql: true
+      javax:
+        persistence:
+          schema-generation:
+            database:
+              action: create
   mvc:
-    throw-exception-if-no-handler-found: true
+    throw-exception-if-no-handler-found: false
   web:
     resources:
-      add-mappings: false
+      add-mappings: true
+  http:
+    encoding:
+      charset: UTF-8
+      enabled: true
+      force: true
 
 logging:
   level:
     root: INFO
     org.springframework.web: INFO
     com.example.server: DEBUG
+    org.hibernate.SQL: DEBUG
+    org.hibernate.type.descriptor.sql: TRACE
   file:
     name: ${LOG_FILE:application.log}
