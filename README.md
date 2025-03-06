@@ -47,7 +47,7 @@ src/
 | username | varchar | 用户姓名 |
 | phone    | varchar | 手机号   |
 
-## 运行项目
+## 本地运行项目
 
 1. 确保已安装 Java 11 和 Maven
 2. 在项目根目录执行：
@@ -56,6 +56,24 @@ src/
    mvn spring-boot:run
    ```
 3. 使用 API 接口测试应用
+
+## 在 Render 上部署
+
+本项目已配置为可在 Render 上轻松部署：
+
+1. 注册 [Render](https://render.com/) 账号
+2. 创建新的 Web Service
+3. 连接到 GitHub 仓库
+4. 使用以下设置：
+   - 环境: Java
+   - 构建命令: `mvn clean package -DskipTests`
+   - 启动命令: `java -jar target/server-1.0-SNAPSHOT.jar --spring.profiles.active=prod`
+5. 添加磁盘存储:
+   - 名称: data
+   - 挂载路径: /data
+   - 大小: 1GB
+
+或者，您可以使用项目中的 `render.yaml` 文件进行一键部署。
 
 ## API 接口
 

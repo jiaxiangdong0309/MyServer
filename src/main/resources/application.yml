@@ -1,13 +1,26 @@
 server:
-  port: 8080
+  port: ${PORT:8080}
   address: 0.0.0.0
 
 spring:
   application:
     name: server
+  datasource:
+    url: ${DATABASE_URL:jdbc:sqlite:database.db}
+    driver-class-name: org.sqlite.JDBC
+  jpa:
+    database-platform: com.example.server.config.SQLiteDialect
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
 
 logging:
   level:
     root: INFO
-    org.springframework.web: DEBUG
+    org.springframework.web: INFO
     com.example.server: DEBUG
+  file:
+    name: ${LOG_FILE:application.log}

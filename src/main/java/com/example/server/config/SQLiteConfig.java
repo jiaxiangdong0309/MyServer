@@ -1,5 +1,6 @@
 package com.example.server.config;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
@@ -14,11 +15,14 @@ import java.util.Properties;
 @Configuration
 public class SQLiteConfig {
 
+    @Value("${spring.datasource.url:jdbc:sqlite:database.db}")
+    private String databaseUrl;
+
     @Bean
     public DataSource dataSource() {
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
         dataSource.setDriverClassName("org.sqlite.JDBC");
-        dataSource.setUrl("jdbc:sqlite:database.db");
+        dataSource.setUrl(databaseUrl);
         return dataSource;
     }
 
