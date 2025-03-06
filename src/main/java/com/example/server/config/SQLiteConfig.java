@@ -10,20 +10,33 @@ import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.PlatformTransactionManager;
 
 import javax.sql.DataSource;
+import java.io.File;
 import java.util.Properties;
 
 @Configuration
 public class SQLiteConfig {
 
-    @Value("${spring.datasource.url:jdbc:sqlite:database.db}")
+    @Value("${spring.datasource.url}")
     private String databaseUrl;
 
     @Bean
     public DataSource dataSource() {
+        // 确保数据库目录存在
+        ensureDatabaseDirectoryExists();
+
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
         dataSource.setDriverClassName("org.sqlite.JDBC");
         dataSource.setUrl(databaseUrl);
         return dataSource;
+    }
+
+    private void ensureDatabaseDirectoryExists() {
+        String url = databaseUrl.replace("jdbc:sqlite:", "");
+        File dbFile = new File(url);
+        File parentDir = dbFile.getParentFile();
+        if (parentDir != null && !parentDir.exists()) {
+            parentDir.mkdirs();
+        }
     }
 
     @Bean

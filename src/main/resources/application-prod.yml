@@ -1,6 +1,6 @@
 spring:
   datasource:
-    url: jdbc:sqlite:/data/database.db
+    url: jdbc:sqlite:${DATA_DIR:/data}/database.db
   jpa:
     show-sql: false
     hibernate:
@@ -12,4 +12,4 @@ logging:
     org.springframework.web: WARN
     com.example.server: INFO
   file:
-    name: /data/application.log
+    name: ${DATA_DIR:/data}/application.log
