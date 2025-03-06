@@ -64,7 +64,15 @@
                         </exclude>
                     </excludes>
                     <mainClass>com.example.server.ServerApplication</mainClass>
+                    <executable>true</executable>
                 </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>repackage</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>
