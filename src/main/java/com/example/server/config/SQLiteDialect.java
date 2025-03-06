@@ -3,6 +3,11 @@ package com.example.server.config;
 import org.hibernate.dialect.Dialect;
 import org.hibernate.dialect.identity.IdentityColumnSupport;
 import org.hibernate.dialect.identity.IdentityColumnSupportImpl;
+import org.hibernate.dialect.function.StandardSQLFunction;
+import org.hibernate.dialect.pagination.AbstractLimitHandler;
+import org.hibernate.dialect.pagination.LimitHandler;
+import org.hibernate.engine.spi.RowSelection;
+import org.hibernate.type.StandardBasicTypes;
 
 public class SQLiteDialect extends Dialect {
 
@@ -29,6 +34,9 @@ public class SQLiteDialect extends Dialect {
         registerColumnType(java.sql.Types.BLOB, "blob");
         registerColumnType(java.sql.Types.CLOB, "clob");
         registerColumnType(java.sql.Types.BOOLEAN, "integer");
+
+        registerFunction("substr", new StandardSQLFunction("substr", StandardBasicTypes.STRING));
+        registerFunction("substring", new StandardSQLFunction("substr", StandardBasicTypes.STRING));
     }
 
     @Override
@@ -85,6 +93,32 @@ public class SQLiteDialect extends Dialect {
     public boolean supportsUnionAll() {
         return true;
     }
+
+    @Override
+    public boolean supportsLimit() {
+        return true;
+    }
+
+    @Override
+    public LimitHandler getLimitHandler() {
+        return new AbstractLimitHandler() {
+            @Override
+            public String processSql(String sql, RowSelection selection) {
+                final boolean hasOffset = selection != null && selection.getFirstRow() != null;
+                return sql + (hasOffset ? " limit ? offset ?" : " limit ?");
+            }
+
+            @Override
+            public boolean supportsLimit() {
+                return true;
+            }
+
+            @Override
+            public boolean bindLimitParametersInReverseOrder() {
+                return true;
+            }
+        };
+    }
 }
 
 class SQLiteIdentityColumnSupport extends IdentityColumnSupportImpl {
@@ -100,6 +134,11 @@ class SQLiteIdentityColumnSupport extends IdentityColumnSupportImpl {
 
     @Override
     public String getIdentityColumnString(int type) {
-        return "integer";
+        return "integer primary key autoincrement";
+    }
+
+    @Override
+    public boolean supportsInsertSelectIdentity() {
+        return true;
     }
 }
