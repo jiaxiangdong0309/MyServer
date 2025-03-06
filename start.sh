@@ -1,12 +1,12 @@
 #!/bin/bash
 set -e
 
-# 创建数据目录（如果不存在）
-mkdir -p /data
-echo "数据目录: /data"
+# 使用当前目录下的data文件夹作为数据目录
+DATA_DIR=./data
+echo "数据目录: $DATA_DIR"
 
 # 设置环境变量
-export DATA_DIR=/data
+export DATA_DIR
 
 # 启动应用
 echo "启动应用..."
