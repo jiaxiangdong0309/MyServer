@@ -1,1 +1,13 @@
- 
+# Compiled class file
+*.class
+
+# Log file
+*.log
+
+# Maven
+target/
+
+# Database files
+*.db
+*.sqlite
+*.sqlite3
