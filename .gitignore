@@ -3,6 +3,9 @@
 
 # Log file
 *.log
+*.log.*
+*.gz
+*.tmp
 
 # Maven
 target/
